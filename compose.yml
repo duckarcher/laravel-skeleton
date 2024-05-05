@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  laravel-php:
+    image: php:8.3-fpm-laravel
+    build:
+      context: ./php
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./php/.bash_aliases:/root/.bash_aliases
+      - ./php/conf.d:/usr/local/etc/php/conf.d
+      - ./src:/var/www/html
+    networks:
+      - dockers-network
+
+  laravel-nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 1234:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./src:/var/www/html
+    networks:
+      - dockers-network
+
+  laravel-maria:
+    image: mariadb:10.6
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3333:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: laravel
+    networks:
+      - dockers-network
+
+# Networks
+networks:
+  dockers-network:
+    driver: bridge
