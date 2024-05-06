@@ -10,7 +10,7 @@ services:
     tty: true
     volumes:
       - ./php/.bash_aliases:/root/.bash_aliases
-      - ./php/conf.d:/usr/local/etc/php/conf.d
+      - ./php/conf.d/90-xdebug.ini:/usr/local/etc/php/conf.d/90-xdebug.ini
       - ./src:/var/www/html
     networks:
       - dockers-network
@@ -24,18 +24,6 @@ services:
     volumes:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./src:/var/www/html
-    networks:
-      - dockers-network
-
-  laravel-maria:
-    image: mariadb:10.6
-    restart: unless-stopped
-    tty: true
-    ports:
-      - 3333:3306
-    environment:
-      MARIADB_ROOT_PASSWORD: root
-      MARIADB_DATABASE: laravel
     networks:
       - dockers-network
 
